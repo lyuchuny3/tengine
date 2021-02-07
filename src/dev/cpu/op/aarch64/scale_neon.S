@@ -24,13 +24,24 @@
 /* relu implementation using neon vector */
 
 
+
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _scale_neon
+#else
+#define KERNEL_NAME scale_neon
+#endif
+#endif
+
 .text
 .align 5
-.global scale_neon
-.hidden scale_neon
-.type   scale_neon, %function
-
-scale_neon:
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 
    //x0 input 
    //x1 gamma

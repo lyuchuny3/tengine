@@ -54,15 +54,21 @@
 #define CONV_RELU_FUSE
 
 #ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _dw_k3s2p0p1
+#else
 #define KERNEL_NAME dw_k3s2p0p1
+#endif
 #endif
 
 .text
 .align 5
 .global KERNEL_NAME
+#ifdef __linux__
 .hidden KERNEL_NAME
 .type KERNEL_NAME, %function
-
+#endif
+    
 KERNEL_NAME:
 
    mov x18,x7

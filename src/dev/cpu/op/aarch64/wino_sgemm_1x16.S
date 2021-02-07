@@ -30,14 +30,24 @@
 
 // x9 ~ x10  temp loop counter
 
-    .section .text,"ax"
-    .align 5
 
-    .type wino_sgemm_1x16 STT_FUNC
-    .global wino_sgemm_1x16
-    .hidden wino_sgemm_1x16
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _wino_sgemm_1x16
+#else
+#define KERNEL_NAME wino_sgemm_1x16
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
     
-wino_sgemm_1x16:
+KERNEL_NAME:
     // bring some code ahead to reduce dependency
     prfm    pldl1keep, [x1]
     cmp    x3, 0x4

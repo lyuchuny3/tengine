@@ -101,13 +101,24 @@
 // v30 dot product for {i1kf, i0ke, i3kd, i2kc}   v2 x v7
 // v31 dot product for {i0kf, i1ke, i2kd, i3kc}   v3 x v7
 
-        .section .text,"ax"
-        .align 5
 
-        .type i8gemm_4x16_a72_int8 STT_FUNC
-        .global i8gemm_4x16_a72_int8
-        .hidden i8gemm_4x16_a72_int8
-i8gemm_4x16_a72_int8:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _i8gemm_4x16_a72_int8
+#else
+#define KERNEL_NAME i8gemm_4x16_a72_int8
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
     // initial
     prfm    pldl1keep, [x1]         // preload input data
     movi    d16, 0

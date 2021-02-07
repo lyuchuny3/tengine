@@ -47,13 +47,24 @@
 //    x14 c1h1 address q22 q23 q24
 //    x15 c1h2 address q25 q26 q27
 
-        .section .text,"ax"
-        .align 5
 
-        .type   im2col_int8_3x3 STT_FUNC
-        .global im2col_int8_3x3
-        .hidden im2col_int8_3x3
-im2col_int8_3x3:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _im2col_int8_3x3
+#else
+#define KERNEL_NAME im2col_int8_3x3
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 	// initial
 	mul	    x2, x2, x1	// x2 = input_xy size
 	

@@ -87,13 +87,24 @@
 // v20 ~ v23 temp register
 // v24 ~ v31 not used 
 
-        .section .text,"ax"
-        .align 5
 
-        .type i8gemm_4x4_a72_int8 STT_FUNC
-        .global i8gemm_4x4_a72_int8
-        .hidden i8gemm_4x4_a72_int8
-i8gemm_4x4_a72_int8:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _i8gemm_4x4_a72_int8
+#else
+#define KERNEL_NAME i8gemm_4x4_a72_int8
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
     // initial
     ldr q0, [x1]        // i3, i2, i1, i0
     cmp x3, 0x4

@@ -43,13 +43,24 @@
 //    x9 
 //    x10
 
-        .section .text,"ax"
-        .align 5
 
-        .type   im2col_int8_1x1 STT_FUNC
-        .global im2col_int8_1x1
-        .hidden im2col_int8_1x1
-im2col_int8_1x1:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _im2col_int8_1x1
+#else
+#define KERNEL_NAME im2col_int8_1x1
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 	cmp	    x3, 4
 	b.lt	col_end
 	lsr	    x3, x3, 2	// x3 = col_cnt

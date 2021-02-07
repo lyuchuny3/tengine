@@ -69,15 +69,23 @@
 //
 
 
+
 #ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _dw_k5s1
+#else
 #define KERNEL_NAME dw_k5s1
 #endif
+#endif
 
-    .section .text, "ax"
-    .align 5
-    .type KERNEL_NAME STT_FUNC
-    .global KERNEL_NAME
-    .hidden KERNEL_NAME
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
 KERNEL_NAME:
     // context save & load parameter
 	sub	sp, sp, 0x40

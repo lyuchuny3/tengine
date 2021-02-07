@@ -42,13 +42,24 @@
 //    x11 cl1 address q2  q3    d19 d20 d21
 //    x12 cl2 address q4  q5    d22 d23 d24
 
-        .section .text,"ax"
-        .align 5
 
-        .type   im2col_fp32_3x3 STT_FUNC
-        .global im2col_fp32_3x3
-        .hidden im2col_fp32_3x3
-im2col_fp32_3x3:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _im2col_fp32_3x3
+#else
+#define KERNEL_NAME im2col_fp32_3x3
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 	// initial
 	cbz	x3, finish
 	cmp	x5, 2

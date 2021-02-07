@@ -63,13 +63,24 @@
 // v30 dot product for  {ik1,  ik0}
 // v31 dot product for  {ik1,  ik0}
 
-        .section .text,"ax"
-        .align 5
 
-        .type sgemv_1x2_a72 STT_FUNC
-        .global sgemv_1x2_a72
-        .hidden sgemv_1x2_a72
-sgemv_1x2_a72:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _sgemv_1x2_a72
+#else
+#define KERNEL_NAME sgemv_1x2_a72
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 // initial
 	movi	d30, 0
 	prfm	pldl1keep, [x1, 0x80] 

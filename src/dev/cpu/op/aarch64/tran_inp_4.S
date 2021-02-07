@@ -29,14 +29,24 @@
 //x3: inw
 //x4: inc_4*(sizeof(float))
 //x5: inhw (to prefetch next channel)
-    .section .text,"ax"
-    .align 5
 
-    .type tran_inp_4 STT_FUNC
-    .global tran_inp_4
-    .hidden tran_inp_4
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _tran_inp_4
+#else
+#define KERNEL_NAME tran_inp_4
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
     
-tran_inp_4:
+KERNEL_NAME:
     sub	sp, sp, 0x40
     stp	d8, d9, [sp]
 	stp	d10,d11,[sp, 0x10]

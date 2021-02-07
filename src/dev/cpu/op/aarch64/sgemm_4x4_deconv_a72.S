@@ -71,13 +71,24 @@
 // v19 dot product for {i3k3, i2k3, i1k3, i0k3}
 // v20~V31 not used
 
-        .section .text,"ax"
-        .align 5
 
-        .type sgemm_4x4_deconv_a72 STT_FUNC
-        .global sgemm_4x4_deconv_a72
-        .hidden sgemm_4x4_deconv_a72
-sgemm_4x4_deconv_a72:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _sgemm_4x4_deconv_a72
+#else
+#define KERNEL_NAME sgemm_4x4_deconv_a72
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
         // bring some code ahead to reduce dependency
 	prfm	pldl1keep, [x0, 0x40]
 	lsl     x4, x4, 2                       // x4  = weight_size

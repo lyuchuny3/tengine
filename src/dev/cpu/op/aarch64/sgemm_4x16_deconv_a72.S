@@ -87,13 +87,24 @@
 // v30 dot product for {i3ke, i2ke, i1ke, i0ke}
 // v31 dot product for {i3kf, i2kf, i1kf, i0kf}
 
-        .section .text,"ax"
-        .align 5
 
-        .type sgemm_4x16_deconv_a72 STT_FUNC
-        .global sgemm_4x16_deconv_a72
-        .hidden sgemm_4x16_deconv_a72
-sgemm_4x16_deconv_a72:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _sgemm_4x16_deconv_a72
+#else
+#define KERNEL_NAME sgemm_4x16_deconv_a72
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 	prfm	pldl1keep, [x0]
 	cmp	x2, 0x4
 

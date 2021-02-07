@@ -30,14 +30,24 @@
 //x4: bias
 //x5: activation
 
-    .section .text,"ax"
-    .align 5
 
-    .type tran_out_4 STT_FUNC
-    .global tran_out_4
-    .hidden tran_out_4
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _tran_out_4
+#else
+#define KERNEL_NAME tran_out_4
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
     
-tran_out_4:
+KERNEL_NAME:
     sub	sp, sp, 0x40
     stp	d8, d9, [sp]
 	stp	d10,d11,[sp, 0x10]

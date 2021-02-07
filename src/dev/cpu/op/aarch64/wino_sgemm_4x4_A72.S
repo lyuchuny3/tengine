@@ -31,14 +31,23 @@
 
 // x9 ~ x10  temp loop counter
 
-    .section .text,"ax"
-    .align 5
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _wino_sgemm_4x4_A72
+#else
+#define KERNEL_NAME wino_sgemm_4x4_A72
+#endif
+#endif
 
-    .type wino_sgemm_4x4_A72 STT_FUNC
-    .global wino_sgemm_4x4_A72
-    .hidden wino_sgemm_4x4_A72
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
     
-wino_sgemm_4x4_A72:
+KERNEL_NAME:
 	cmp	x3, 0x4
 
 none_biases:

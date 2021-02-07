@@ -63,13 +63,24 @@
 // v30 dot product for  {ik3,  ik2,  ik1,  ik0}
 // v31 dot product for  {ik7,  ik6,  ik5,  ik4}
 
-        .section .text,"ax"
-        .align 5
 
-        .type sgemv_1x8_a72 STT_FUNC
-        .global sgemv_1x8_a72
-        .hidden sgemv_1x8_a72
-sgemv_1x8_a72:
+#ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _sgemv_1x8_a72
+#else
+#define KERNEL_NAME sgemv_1x8_a72
+#endif
+#endif
+
+.text
+.align 5
+.global KERNEL_NAME
+#ifdef __linux__
+.hidden KERNEL_NAME
+.type KERNEL_NAME, %function
+#endif
+    
+KERNEL_NAME:
 // initial
 	cmp	x3, 0x4
 	prfm	pldl1keep, [x1, 0x40] 

@@ -86,15 +86,22 @@
 //      k00  k01  k02   0   k00   k01  k02   0
 //      c0   d0    e0    f0  g0   h0   i0   j0     ----> out3   out7
 //      0    k00  k01   k02  0    k00  k01  k02
+
 #ifndef KERNEL_NAME
+#ifdef __APPLE__
+#define KERNEL_NAME _depthwise_k3s1p1_int8_a72
+#else
 #define KERNEL_NAME depthwise_k3s1p1_int8_a72
+#endif
 #endif
 
 .text
 .align 5
 .global KERNEL_NAME
+#ifdef __linux__
 .hidden KERNEL_NAME
 .type KERNEL_NAME, %function
+#endif
 
 KERNEL_NAME:
     sub     sp,sp,0x40
