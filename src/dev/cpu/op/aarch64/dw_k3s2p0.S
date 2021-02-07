@@ -76,8 +76,6 @@
 .hidden KERNEL_NAME
 .type KERNEL_NAME, %function
 #endif
-    
-KERNEL_NAME:
 
 KERNEL_NAME:
    mov x18,x7
