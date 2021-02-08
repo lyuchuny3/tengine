@@ -144,11 +144,21 @@ channel_done:
 
 
 //scale_neon_bias
-.global scale_neon_bias
-.hidden scale_neon_bias
-.type   scale_neon_bias, %function
+#ifndef KERNEL_NAME_BIAS
+#ifdef __APPLE__
+#define KERNEL_NAME_BIAS _scale_neon_bias
+#else
+#define KERNEL_NAME_BIAS scale_neon_bias
+#endif
+#endif
 
-scale_neon_bias:
+.global KERNEL_NAME_BIAS
+#ifdef __linux__
+.hidden KERNEL_NAME_BIAS
+.type KERNEL_NAME_BIAS, %function
+#endif
+
+KERNEL_NAME_BIAS:
    //x0 input 
    //x1 gamma
    //x2 channel_number
